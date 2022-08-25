@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { Footer } from "src/components/footer";
-import { Header } from "src/components/header";
+import { Footer } from "src/components/footer/footer";
+import { Header } from "src/components/header/header";
 
 export const Layout: React.FC<{ children: ReactNode }> = (props) => {
   return (

@@ -1,0 +1,10 @@
+@use "/src/styles/common" as *;
+
+.header {
+  background-color: rgb(11, 246, 246);
+  transition: 1s;
+
+  @include mq(md) {
+    background-color: rgb(70, 128, 128);
+  }
+}

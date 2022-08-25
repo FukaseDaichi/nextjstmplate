@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
-import { Layout } from "src/components/layout";
+import { Layout } from "src/components/layout/layout";
 
 const About: NextPage = () => {
   return (

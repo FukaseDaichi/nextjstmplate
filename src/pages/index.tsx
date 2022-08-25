@@ -1,6 +1,5 @@
 import type { NextPage } from "next";
-import Head from "next/head";
-import { Layout } from "src/components/layout";
+import { Layout } from "src/components/layout/layout";
 
 const Home: NextPage = () => {
   const handleClick = () => {
@@ -9,9 +8,6 @@ const Home: NextPage = () => {
 
   return (
     <Layout>
-      <Head>
-        <title>Home</title>
-      </Head>
       <h2>Home</h2>
       <button onClick={handleClick}>Button</button>
     </Layout>
