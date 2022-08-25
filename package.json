@@ -15,8 +15,10 @@
   },
   "dependencies": {
     "next": "12.1.5",
+    "next-seo": "^5.5.0",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "sass": "^1.54.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -42,6 +44,6 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --fix",
-    "*.{ts,tsx,css,html}": "prettier --write"
+    "*.{js,ts,tsx,css,html,scss}": "prettier --write"
   }
 }

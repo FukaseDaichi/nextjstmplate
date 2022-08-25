@@ -5,3 +5,5 @@
 - ESLint
 - Prettier
 - Jest
+- next-seo
+- sass

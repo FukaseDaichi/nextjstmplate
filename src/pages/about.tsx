@@ -1,14 +1,24 @@
 import type { NextPage } from "next";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { Layout } from "src/components/layout";
 
 const About: NextPage = () => {
   return (
     <Layout>
-      <Head>
-        <title>About</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+      <NextSeo
+        title="ページのタイトル"
+        description="ページの説明"
+        openGraph={{
+          url: "ページのURL",
+          title: "ページのタイトル",
+          description: "ページの説明",
+          images: [
+            {
+              url: "https://www.example.ie/og-image-02.jpg",
+            },
+          ],
+        }}
+      />
       <h2>About</h2>
     </Layout>
   );
