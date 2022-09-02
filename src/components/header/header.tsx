@@ -5,6 +5,7 @@ import styles from "./header.module.scss";
 const items = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About" },
+  { href: "/peer", label: "Peer" },
 ];
 
 export const Header: React.FC = () => {

@@ -18,7 +18,8 @@
     "next-seo": "^5.5.0",
     "react": "18.0.0",
     "react-dom": "18.0.0",
-    "sass": "^1.54.5"
+    "sass": "^1.54.5",
+    "skyway-js": "^4.4.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
