@@ -17,3 +17,4 @@ Next.js テンプレート
 - Jest
 - next-seo
 - sass
+- skyway-js
