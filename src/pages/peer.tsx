@@ -1,84 +1,57 @@
-/* eslint-disable no-console */
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
-import type { MeshRoom } from "skyway-js";
+import { useDispatch } from "react-redux";
 import Peer from "skyway-js";
+import { ChatComponents } from "src/components/contents/chat/chatcontents";
+import { MyUserComponents } from "src/components/contents/myuser/myusercontents";
+import { UsersComponents } from "src/components/contents/users/userscontents";
 import { Layout } from "src/components/layout/layout";
+import roomSlice from "src/modules/slice/roomSlice";
+import userSlice from "src/modules/slice/userSlice";
+import { SkyWaySercive } from "src/service/SkyWayService";
+import type { User } from "src/type";
 
 const peer: Peer = new Peer({
   key: process.env.NEXT_PUBLIC_SKYWAY_API_KEY as string,
 });
 
 const SkyWaySample: NextPage = () => {
-  const [peerId, setPeerId] = useState<string>("");
-  const [room, setRoom] = useState<MeshRoom>();
-
-  const [messages, setMessages] = useState<string[]>([]);
+  const dispatch = useDispatch();
 
   const [inputId, setInputId] = useState<string>("");
-  const [inputMsg, setInputMsg] = useState<string>("");
 
   useEffect(() => {
     peer.on("open", () => {
-      setPeerId(peer.id);
+      new SkyWaySercive(peer);
+      dispatch(userSlice.actions.setSrc(peer.id));
     });
-
-    // エラー時のコンソール
-    peer.on("error", console.error);
-  }, []);
-
-  useEffect(() => {
-    if (room) {
-      room.once("open", () => {
-        console.log("オープン");
-      });
-
-      room.on("peerJoin", (joindata: string) => {
-        console.log("ジョイン:" + joindata);
-      });
-
-      room.on("stream", async (stream) => {
-        console.log("stream");
-        console.log(stream);
-      });
-
-      room.on("peerLeave", (leavedata: string) => {
-        console.log("peerLeave:" + leavedata);
-      });
-
-      room.once("close", (closeData: string) => {
-        console.log("cloce" + closeData);
-      });
-    }
-  }, [room]);
-
-  useEffect(() => {
-    if (room) {
-      room.on("data", ({ data, src }) => {
-        console.log(src);
-        setMessages([...messages, data]);
-      });
-    }
-  }, [room, messages]);
+  }, [dispatch]);
 
   const handleConnect = useCallback(() => {
-    console.log(inputId + "で接続");
-    setRoom(peer.joinRoom(inputId, { mode: "mesh" }));
-  }, [inputId]);
+    SkyWaySercive.roomIn(inputId);
+
+    // 入室順の取得、設定
+    SkyWaySercive.room.once("open", () => {
+      const no: number = Object.keys(SkyWaySercive.room.connections).length;
+      // eslint-disable-next-line no-console
+      console.log(SkyWaySercive.room.connections);
+      dispatch(userSlice.actions.setNo(no));
+    });
+
+    SkyWaySercive.room.on("peerJoin", (src: string) => {
+      const user: User = {
+        no: Object.keys(SkyWaySercive.room.connections).length,
+        name: "",
+        src: src,
+      };
+      dispatch(roomSlice.actions.updateUser(user));
+    });
+  }, [inputId, dispatch]);
 
   const handleChangeId = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputId(event.target.value);
   };
-
-  const handleChangeMsg = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputMsg(event.target.value);
-  };
-
-  const handleSend = useCallback(() => {
-    setMessages([...messages, inputMsg]);
-    room?.send(inputMsg);
-  }, [room, inputMsg, messages]);
 
   return (
     <Layout>
@@ -91,22 +64,15 @@ const SkyWaySample: NextPage = () => {
           description: "ページの説明",
         }}
       />
-      <h2>my:{peerId}</h2>
       <div>
         <div>
           <input type="text" value={inputId} onChange={handleChangeId} />
           <button onClick={handleConnect}>接続</button>
         </div>
-        <div>
-          <input type="text" value={inputMsg} onChange={handleChangeMsg} />
-          <button onClick={handleSend}>メッセージ送付</button>
-        </div>
-        <div>
-          {messages.map((msg: string, index: number) => {
-            return <p key={index}>{msg}</p>;
-          })}
-        </div>
       </div>
+      <MyUserComponents />
+      <ChatComponents />
+      <UsersComponents />
     </Layout>
   );
 };

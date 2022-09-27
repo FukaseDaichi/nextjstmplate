@@ -18,3 +18,11 @@ Next.js テンプレート
 - next-seo
 - sass
 - skyway-js
+
+## redux
+
+- @reduxjs/toolkit
+- @types/redux-logger
+- @types/react-redux
+- redux-persist
+- react-redux
