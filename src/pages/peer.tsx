@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import Peer from "skyway-js";
 import { ChatComponents } from "src/components/contents/chat/chatcontents";
@@ -18,8 +19,11 @@ const peer: Peer = new Peer({
 
 const SkyWaySample: NextPage = () => {
   const dispatch = useDispatch();
-
   const [inputId, setInputId] = useState<string>("");
+
+  const user: User = useSelector((state: any) => {
+    return state.user;
+  });
 
   useEffect(() => {
     peer.on("open", () => {
@@ -33,21 +37,18 @@ const SkyWaySample: NextPage = () => {
 
     // 入室順の取得、設定
     SkyWaySercive.room.once("open", () => {
-      const no: number = Object.keys(SkyWaySercive.room.connections).length;
-      // eslint-disable-next-line no-console
-      console.log(SkyWaySercive.room.connections);
-      dispatch(userSlice.actions.setNo(no));
+      dispatch(roomSlice.actions.updateUser(user));
     });
 
     SkyWaySercive.room.on("peerJoin", (src: string) => {
       const user: User = {
-        no: Object.keys(SkyWaySercive.room.connections).length,
+        no: 0,
         name: "",
         src: src,
       };
       dispatch(roomSlice.actions.updateUser(user));
     });
-  }, [inputId, dispatch]);
+  }, [inputId, dispatch, user]);
 
   const handleChangeId = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputId(event.target.value);

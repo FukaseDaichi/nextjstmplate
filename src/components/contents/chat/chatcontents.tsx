@@ -48,7 +48,6 @@ export const ChatComponents: React.FC = () => {
 
   const handleChatSend = useCallback(() => {
     // eslint-disable-next-line no-console
-    console.log(SkyWaySercive.room.connections);
     const message: Message = {
       src: user.src,
       content: inputMsg,

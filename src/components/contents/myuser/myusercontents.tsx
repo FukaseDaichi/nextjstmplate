@@ -19,12 +19,13 @@ export const MyUserComponents: React.FC = () => {
 
   useEffect(() => {
     setName(user.name);
-  }, [user.name]);
+    //usersのアップデート
+    dispatch(roomSlice.actions.everyUsersUpdate(user));
+  }, [user, dispatch]);
 
   useEffect(() => {
-    // TODOusers更新メソッド追加
-    SkyWaySercive.addEveryCall("chat", (roomData: RoomData) => {
-      dispatch(roomSlice.actions.updateObject(roomData.data.param));
+    SkyWaySercive.addEveryCall("users", (roomData: RoomData) => {
+      dispatch(roomSlice.actions.updateUser(roomData.data.param));
     });
   }, [dispatch]);
 

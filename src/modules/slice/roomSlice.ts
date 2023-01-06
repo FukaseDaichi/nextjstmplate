@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { SkyWaySercive } from "src/service/SkyWayService";
-import type { MyRoomData, PeerData } from "src/type";
+import type { MyRoomData, PeerData, User } from "src/type";
 
 export type ObjectUpdateParam = {
   paramName: string;
@@ -10,6 +10,16 @@ export type ObjectUpdateParam = {
 const sendObject = (data: ObjectUpdateParam) => {
   const peerData: PeerData = {
     key: data.paramName,
+    param: data,
+  };
+  if (SkyWaySercive.room) {
+    SkyWaySercive.room.send(peerData);
+  }
+};
+
+const sendUser = (data: User) => {
+  const peerData: PeerData = {
+    key: "users",
     param: data,
   };
   if (SkyWaySercive.room) {
@@ -57,11 +67,20 @@ const roomSlice = createSlice({
           [objectUpdateParam.paramName]: objectUpdateParam.param,
         };
       }
+
+      //全体更新
       sendObject(objectUpdateParam);
     },
     updateUser: (state: any, action) => {
       state.users = { ...state.users, [action.payload.src]: action.payload };
     },
+
+    everyUsersUpdate: (state: any, action) => {
+      state.users = { ...state.users, [action.payload.src]: action.payload };
+      //全体更新
+      sendUser(state.users);
+    },
+
     // srcをセットする
     deleteUser: (state: any, action) => {
       const newUsers = { ...state.users };
